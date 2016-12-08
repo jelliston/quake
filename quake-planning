@@ -1,0 +1,69 @@
+Map out the voice experience... make sure it's really clear... what can the user say at every point, and what will alexa come back
+
+
+Quake: Alexa earthquake skill
+
+On first start:
+-----------------
+Alexa: welcome + locationPrompt
+    welcome = "Welcome to Quake - the earthquake skill for Amazon Alexa." 
+    locationPrompt = "If you'd like to be able to ask: "Alexa, was that an earthquake?", you need to provide your location details. Do you want to provide your your location details {now}, {later} or {not at all}?"
+
+User reply 1: "Now"
+    Alexa: locationSetupIntro + setupCountry
+        locationSetupIntro = "Great, let's begin." 
+        setupCountry = "What country do you live in?
+
+    User: "United States"
+    Alexa: countryConfirm + setupCity
+        countryConfirm = "Your country is {#country}."
+        setupCity = "What town or city do you live in?
+
+    User: "Seattle"
+    Alexa: cityConfirm + setupCode
+        cityConfirm = "Your city is {#city}."
+        setupCode = "What is your zip code, or post code?
+
+
+
+User reply 2: "Later"
+    Alexa: reminder
+        reminder = "OK, I'll remind you the next time you start Quake."
+    action: on next start-up: welcomeBack + locationPrompt
+        welcomeBack = "Welcome back to Quake."
+
+User reply 3: "Not at all"
+    Alexa: That's fine. You will still be able to use Quake."
+
+
+To reset
+-----------------
+User: "Alexa, tell Quake to reset."
+Alexa: welcome + locationPrompt
+
+
+Normal operation:
+-----------------
+
+User: "Alexa, was that an earthquake?"
+Alexa: "Yes, at {time, yesterday/today} an earthquake occurred {location: something like '33km NW of Fairview, Oklahoma'} and registered a magnitude of {#magnitude}"
+
+User: "Alexa, ask quake for any nearby earthquakes"
+Alexa: "there have been {#} earthquakes near you in the past day and {#} in the past month”
+
+User: "Alexa, ask quake for any recent earthquakes"
+Alexa: "there have been {#} earthquakes worldwide of magnitude 2.5 and above in the past day. The largest occurred {location: something like '33km NW of Fairview, Oklahoma'} at {time, yesterday/today} and registered a magnitude of {#magnitude}”
+
+User: “Alexa, what is the largest earthquake in the last month”
+Alexa: “The largest earthquake in the last month occurred {location} at {time, yesterday/today} and registered a magnitude of {#magnitude}"
+
+User: “Alexa, what is the largest earthquake in the last week”
+Alexa: “The largest earthquake in the last week occurred {location} at {time, yesterday/today} and registered a magnitude of {#magnitude}"
+
+User: “Alexa, what is the largest earthquake in the last day”
+Alexa: “The largest earthquake in the last week occurred {location} at {time, yesterday/today} and registered a magnitude of {#magnitude}"
+
+
+APIs to use include:
+USGS 
+GeoNames (possibly)
