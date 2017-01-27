@@ -139,7 +139,7 @@ function getUsgsCallback(alexa, loc) {
   return function (resp) {
     var MAX_LOCATIONS_TO_SAY = 3;
     var res = '';
-    if (resp.metadata.count > 0) {
+    if (resp.metadata.count > 1) {
       res += resp.metadata.count + " earthquakes near " + loc + ". ";
       if (resp.metadata.count > MAX_LOCATIONS_TO_SAY) {
         res += "Here are the latest " + MAX_LOCATIONS_TO_SAY + ".";
@@ -153,6 +153,11 @@ function getUsgsCallback(alexa, loc) {
 
         res += ' A magnitude ' + mag + ' near ' + location + '.';
       }
+    } else if (resp.metadata.count == 1) {
+        res += resp.metadata.count + " earthquake near " + loc + ". ";
+        var mag = resp.features[i].properties.mag;
+        var location = resp.features[i].properties.place.replace(/.+ of (.+), .+/, "$1");
+        res += ' A magnitude ' + mag + ' near ' + location + '.';
     } else {
       res = "No earthquakes near " + loc + " in the last 14 days.";
     }
