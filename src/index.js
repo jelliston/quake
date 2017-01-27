@@ -22,18 +22,18 @@ var GOOGLE_API_KEY = g.googleAPIKey;
 *
 * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Introduction_to_Object-Oriented_JavaScript#Inheritance
 */
-var EarthquakeInfo = function () {
+var Quake = function () {
   AlexaSkill.call(this, APP_ID);
 };
 
 // Extend AlexaSkill
-EarthquakeInfo.prototype = Object.create(AlexaSkill.prototype);
-EarthquakeInfo.prototype.constructor = EarthquakeInfo;
+Quake.prototype = Object.create(AlexaSkill.prototype);
+Quake.prototype.constructor = Quake;
 
 /**
 * Override to initialize session state.
 */
-EarthquakeInfo.prototype.eventHandlers.onSessionStarted = function (sessionStartedRequest, session) {
+Quake.prototype.eventHandlers.onSessionStarted = function (sessionStartedRequest, session) {
   console.log("onSessionStarted requestId: " + sessionStartedRequest.requestId +
   ", sessionId: " + session.sessionId);
 
@@ -43,14 +43,14 @@ EarthquakeInfo.prototype.eventHandlers.onSessionStarted = function (sessionStart
 /**
 * Override to teardown session state.
 */
-EarthquakeInfo.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequest, session) {
+Quake.prototype.eventHandlers.onSessionEnded = function (sessionEndedRequest, session) {
   console.log("onSessionEnded requestId: " + sessionEndedRequest.requestId +
   ", sessionId: " + session.sessionId);
 
   //Any session cleanup logic would go here.
 };
 
-EarthquakeInfo.prototype.intentHandlers = {
+Quake.prototype.intentHandlers = {
   "AMAZON.HelpIntent": function(intent, session, response) {
     handleHelpRequest(intent, session, response);
   },
@@ -78,14 +78,14 @@ EarthquakeInfo.prototype.intentHandlers = {
 };
 
 function handleHelpRequest(intent, session, alexa) {
-  alexa.ask("Earthquake info reports earthquakes for a given location. I report quakes within 2 weeks, 100 kilometers, and magnitutde 3 and higher. Near what city do you want to search for earthquakes?");
+  alexa.ask("Quake reports earthquakes for a given location. I report quakes within 2 weeks, 100 kilometers, and magnitutde 3 and higher. Near what city do you want to search for earthquakes?");
 }
 
 /**
 * Launching without specifying an intent, route to the default.
 */
-EarthquakeInfo.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
-  console.log("EarthquakeInfo onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
+Quake.prototype.eventHandlers.onLaunch = function (launchRequest, session, response) {
+  console.log("Quake onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
 
   var speechOutput = "Near what city do you want to search for earthquakes?";
   response.ask(speechOutput, speechOutput);
@@ -180,6 +180,6 @@ function httpGetJSON(ssl, options, callback) {
 
 // Create the handler that responds to the Alexa Request.
 exports.handler = function (event, context) {
-  var skill = new EarthquakeInfo();
+  var skill = new Quake();
   skill.execute(event, context);
 };
