@@ -1,6 +1,6 @@
-# Earthquake Info Skill
+# Quake
 
-Earthquake Info reports the magnitude and location of several recent earthquakes near a particular city.
+Quake reports the magnitude and location of several recent earthquakes near a particular city.
 
 
 # Features
