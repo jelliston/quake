@@ -1,0 +1,98 @@
+{
+  "intents": [
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "GetEarthquakeGivenCityEventIntent",
+      "slots": [
+        {
+          "name": "Location",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "GetEarthquakeGivenTwoIntent",
+      "slots": [
+        {
+          "name": "KOne",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KTwo",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "GetEarthquakeGivenThreeIntent",
+      "slots": [
+        {
+          "name": "KOne",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KTwo",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KThree",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "GetEarthquakeGivenFourIntent",
+      "slots": [
+        {
+          "name": "KOne",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KTwo",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KThree",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KFour",
+          "type": "LITERAL"
+        }
+      ]
+    },
+    {
+      "intent": "GetEarthquakeGivenFiveIntent",
+      "slots": [
+        {
+          "name": "KOne",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KTwo",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KThree",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KFour",
+          "type": "LITERAL"
+        },
+        {
+          "name": "KFive",
+          "type": "LITERAL"
+        }
+      ]
+    }
+  ]
+}

@@ -1,15 +1,20 @@
-Ask Quake if that was an earthquake
-Ask Quake if that was a quake
-Ask Quake to tell me if that was an earthquake
-Ask Quake to tell me was that an earthquake
-Ask Quake to tell me was that a quake
-Start Quake and tell me if that was an earthquake
-Start Quake and tell me was that an earthquake
-Start Quake and tell me was that a quake
+GetEarthquakeGivenCityEventIntent {yuma|Location}
+GetEarthquakeGivenCityEventIntent about {yuma|Location}
 
+GetEarthquakeGivenTwoIntent {yuma|KOne} {arizona|KTwo}
+GetEarthquakeGivenTwoIntent {las|KOne} {vegas|KTwo}
+GetEarthquakeGivenTwoIntent about {yuma|KOne} {arizona|KTwo}
 
-quakeQueryIntent that was an earthquake
-quakeQueryIntent that was a quake
-quakeQueryIntent tell me if that was an earthquake
-quakeQueryIntent tell me was that an earthquake
-quakeQueryIntent tell me was that a quake
+GetEarthquakeGivenThreeIntent {yuma|KOne} {arizona|KTwo} {usa|KThree}
+GetEarthquakeGivenThreeIntent {las|KOne} {vegas|KTwo} {nevada|KThree}
+GetEarthquakeGivenThreeIntent {boca|KOne} {de|KTwo} {yuma|KThree}
+GetEarthquakeGivenThreeIntent about {yuma|KOne} {arizona|KTwo} {usa|KThree}
+GetEarthquakeGivenThreeIntent about {san|KOne} {francisco|KTwo} {california|KThree}
+
+GetEarthquakeGivenFourIntent {las|KOne} {vegas|KTwo} {nevada|KThree} {usa|KFour}
+GetEarthquakeGivenFourIntent {san|KOne} {luis|KTwo} {obispo|KThree} {california|KFour}
+GetEarthquakeGivenFourIntent about {las|KOne} {vegas|KTwo} {nevada|KThree} {usa|KFour}
+
+GetEarthquakeGivenFiveIntent {san|KOne} {luis|KTwo} {obispo|KThree} {california|KFour} {usa|KFive}
+GetEarthquakeGivenFiveIntent {boca|KOne} {de|KTwo} {yuma|KThree} {dominican|KFour} {republic|KFive}
+GetEarthquakeGivenFiveIntent about {san|KOne} {luis|KTwo} {obispo|KThree} {california|KFour} {usa|KFive}
