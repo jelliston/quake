@@ -108,7 +108,7 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
   };
   console.log("geocodeOptions:" + JSON.stringify(geocodeOptions));
   var geocodeCallback = function (json) {
-    console.log(JSON.stringify(json));
+    console.log("json:" + JSON.stringify(json));
     var lat = json.results[0].geometry.location.lat;
     var lng = json.results[0].geometry.location.lng;
     var loc = json.results[0].address_components[0].long_name;
@@ -129,6 +129,7 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
         "Content-Type": "application/json"
       }
     };
+  console.log("usgsOptions:" + JSON.stringify(usgsOptions));
 
     httpGetJSON(false, usgsOptions, getUsgsCallback(alexa, loc));
   };
@@ -137,6 +138,7 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
 
 function getUsgsCallback(alexa, loc) {
   return function (resp) {
+    console.log("USGS response:" + JSON.stringify(resp));
     var MAX_LOCATIONS_TO_SAY = 3;
     var res = '';
     if (resp.metadata.count > 1) {
@@ -154,9 +156,9 @@ function getUsgsCallback(alexa, loc) {
         res += ' A magnitude ' + mag + ' near ' + location + '.';
       }
     } else if (resp.metadata.count == 1) {
-        res += resp.metadata.count + " earthquake near " + loc + ". ";
-        var mag = resp.features[i].properties.mag;
-        var location = resp.features[i].properties.place.replace(/.+ of (.+), .+/, "$1");
+        res += 1 + " earthquake near " + loc + ". ";
+        var mag = resp.features[0].properties.mag;
+        var location = resp.features[0].properties.place.replace(/.+ of (.+), .+/, "$1");
         res += ' A magnitude ' + mag + ' near ' + location + '.';
     } else {
       res = "No earthquakes near " + loc + " in the last 14 days.";
@@ -179,6 +181,7 @@ function httpGetJSON(ssl, options, callback) {
       var json = JSON.parse(body);
       callback(json);
     });
+    console.log(callback);
   };
   var request = http.get(options, getCallback).end();
 }
