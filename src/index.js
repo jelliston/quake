@@ -91,8 +91,18 @@ Quake.prototype.eventHandlers.onLaunch = function (launchRequest, session, respo
   response.ask(speechOutput, speechOutput);
 };
 
+/* Using input from web app. Create an array of location objects,
+* each object has parameters set by web app */
+
+var fromDb = [     /* locations & parameters taken from web app; hard-coded in for now */
+  { nickname: "home", location:"san+francisco" , latitude: 37.7749295, longitude: -122.4194155, maxradiuskm: 100, minmagnitude: 3 },
+  { nickname: "bro", location: "yuma+arizona", latitude: 32.626512, longitude: -114.6276916, maxradiuskm: 100, minmagnitude: 3 },
+  { nickname: "jane", location:"ada+michigan", latitude: 42.9607266, longitude: -85.495471, maxradiuskm: 100, minmagnitude: 3 }
+];
+
 function handleEarthquakesByLocationIntent(intent, session, alexa) {
   var requestedLocation = Object.keys(intent.slots).map(function(k){return intent.slots[k].value;}).join("+");
+  requestedLocation = requestedLocation.toLowerCase();
   console.log("requestedLocation: " + requestedLocation);
   if (!Boolean(requestedLocation)) {
     console.log("Requested location is NULL. Prompting help.");
@@ -100,9 +110,31 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
     return;
   }
 
+  var rad;
+  var mag;
+  
+  var index = -1;
+  for(var i = 0, len = fromDb.length; i < len; i++){
+    if (fromDb[i].nickname == requestedLocation){
+      index = i;
+      break; 
+    } 
+  }
+  
+  if (index == -1) {
+    locForGeocode = requestedLocation;
+    rad = 100;
+    mag = 3;
+  } else {
+    locForGeocode = fromDb[index].location; 
+    rad = fromDb[index].maxradiuskm;
+    mag = fromDb[index].minmagnitude;
+  }
+  console.log("locForGeocode: " + locForGeocode);
+
   var geocodeOptions = {
     hostname: "maps.google.com",
-    path: "/maps/api/geocode/json?key=" + GOOGLE_API_KEY + "&address=" + requestedLocation,
+    path: "/maps/api/geocode/json?key=" + GOOGLE_API_KEY + "&address=" + locForGeocode,
     method: "GET",
     headers: { "Content-Type": "application/json" }
   };
@@ -121,8 +153,8 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
       path: "/fdsnws/event/1/query?format=geojson" +
       "&latitude=" + lat +
       "&longitude=" + lng +
-      "&maxradiuskm=100" +
-      "&minmagnitude=3" +
+      "&maxradiuskm=" + rad +
+      "&minmagnitude=" + mag +
       "&starttime=" + date,
       method: "GET",
       headers: {
