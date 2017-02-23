@@ -1,3 +1,11 @@
+WasThatAnEarthquakeIntent was that an earthquake
+WasThatAnEarthquakeIntent was that a quake
+WasThatAnEarthquakeIntent what was that
+WasThatAnEarthquakeIntent did I feel an earthquake
+WasThatAnEarthquakeIntent did I feel a quake
+WasThatAnEarthquakeIntent did the ground move
+WasThatAnEarthquakeIntent did the ground shake
+
 GetEarthquakeGivenCityEventIntent {yuma|Location}
 GetEarthquakeGivenCityEventIntent about {yuma|Location}
 

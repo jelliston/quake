@@ -60,6 +60,9 @@ Quake.prototype.intentHandlers = {
   "AMAZON.StopIntent": function (intent, session, response) {
     response.tell("")
   },
+  WasThatAnEarthquakeIntent: function (intent, session, response) {
+    handleWasThatAnEarthquakeIntent(intent, session, response);
+  },
   GetEarthquakeGivenCityEventIntent: function (intent, session, response) {
     handleEarthquakesByLocationIntent(intent, session, response);
   },
@@ -91,18 +94,29 @@ Quake.prototype.eventHandlers.onLaunch = function (launchRequest, session, respo
   response.ask(speechOutput, speechOutput);
 };
 
-/* Using input from web app. Create an array of location objects,
-* each object has parameters set by web app */
+/* Using input from web app. Create an array of location objects, each object has parameters set by web app */
 
-var fromDb = [     /* locations & parameters taken from web app; hard-coded in for now */
+var fromDb = [    /* locations & parameters taken from web app; hard-coded in for now */
   { nickname: "home", location:"san+francisco" , latitude: 37.7749295, longitude: -122.4194155, maxradiuskm: 100, minmagnitude: 3 },
   { nickname: "bro", location: "yuma+arizona", latitude: 32.626512, longitude: -114.6276916, maxradiuskm: 100, minmagnitude: 3 },
   { nickname: "jane", location:"ada+michigan", latitude: 42.9607266, longitude: -85.495471, maxradiuskm: 100, minmagnitude: 3 }
 ];
 
+var wasThatAnEarthquake;
+
+function handleWasThatAnEarthquakeIntent(intent, session, alexa) {
+  wasThatAnEarthquake = "home";
+  handleEarthquakesByLocationIntent(intent, session, alexa);
+}
+
 function handleEarthquakesByLocationIntent(intent, session, alexa) {
-  var requestedLocation = Object.keys(intent.slots).map(function(k){return intent.slots[k].value;}).join("+");
-  requestedLocation = requestedLocation.toLowerCase();
+  var requestedLocation;
+  if (wasThatAnEarthquake == "home") {
+    requestedLocation = wasThatAnEarthquake;
+  } else {
+    requestedLocation = Object.keys(intent.slots).map(function(k){return intent.slots[k].value;}).join("+");
+    requestedLocation = requestedLocation.toLowerCase();
+  }
   console.log("requestedLocation: " + requestedLocation);
   if (!Boolean(requestedLocation)) {
     console.log("Requested location is NULL. Prompting help.");
@@ -111,24 +125,24 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
   }
 
   var rad;
-  var mag;
-  
+  var magn;
+
   var index = -1;
   for(var i = 0, len = fromDb.length; i < len; i++){
     if (fromDb[i].nickname == requestedLocation){
       index = i;
-      break; 
-    } 
+      break;
+    }
   }
-  
+
   if (index == -1) {
     locForGeocode = requestedLocation;
     rad = 100;
-    mag = 3;
+    magn = 3;
   } else {
-    locForGeocode = fromDb[index].location; 
+    locForGeocode = fromDb[index].location;
     rad = fromDb[index].maxradiuskm;
-    mag = fromDb[index].minmagnitude;
+    magn = fromDb[index].minmagnitude;
   }
   console.log("locForGeocode: " + locForGeocode);
 
@@ -139,6 +153,7 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
     headers: { "Content-Type": "application/json" }
   };
   console.log("geocodeOptions:" + JSON.stringify(geocodeOptions));
+
   var geocodeCallback = function (json) {
     console.log("json:" + JSON.stringify(json));
     var lat = json.results[0].geometry.location.lat;
@@ -154,7 +169,7 @@ function handleEarthquakesByLocationIntent(intent, session, alexa) {
       "&latitude=" + lat +
       "&longitude=" + lng +
       "&maxradiuskm=" + rad +
-      "&minmagnitude=" + mag +
+      "&minmagnitude=" + magn +
       "&starttime=" + date,
       method: "GET",
       headers: {
