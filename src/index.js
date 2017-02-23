@@ -16,6 +16,45 @@ var AlexaSkill = require('./AlexaSkill');
 var g = require('./GoogleAPIKey');
 var GOOGLE_API_KEY = g.googleAPIKey;
 
+/* Google Analytics */
+var express = require('express');
+var request = require('request');
+var app = express();
+var GA_TRACKING_ID = 'UA-92538925-1';
+
+function trackEvent (category, action, label, value, cb) {
+  const data = {
+    v: '1', // API Version.
+    tid: GA_TRACKING_ID, // Tracking ID / Property ID.
+    // Anonymous Client Identifier. Ideally, this should be a UUID that
+    // is associated with particular user, device, or browser instance.
+    cid: '555',
+    t: 'event', // Event hit type.
+    ec: category, // Event category.
+    ea: action, // Event action.
+    el: label, // Event label.
+    ev: value // Event value.
+  };
+
+  request.post(
+    'http://www.google-analytics.com/collect',
+    {
+      form: data
+    },
+    (err, response) => {
+      if (err) {
+        cb(err);
+        return;
+      }
+      if (response.statusCode !== 200) {
+        cb(new Error('Tracking failed'));
+        return;
+      }
+      cb();
+    }
+  );
+}
+
 /**
 * This is a child of AlexaSkill.
 * To read more about inheritance in JavaScript, see the link below.
@@ -91,14 +130,21 @@ Quake.prototype.eventHandlers.onLaunch = function (launchRequest, session, respo
   console.log("Quake onLaunch requestId: " + launchRequest.requestId + ", sessionId: " + session.sessionId);
 
   var speechOutput = "Near what city do you want to search for earthquakes?";
-  response.ask(speechOutput, speechOutput);
+  trackEvent('On Launch','Info','Get','1',
+  function(err) {
+          if (err) {
+              return next(err);
+          }
+          //var speechOutput = "Okay.";
+          response.ask(speechOutput, speechOutput);
+        });
 };
 
 /* Using input from web app. Create an array of location objects, each object has parameters set by web app */
 
 var fromDb = [    /* locations & parameters taken from web app; hard-coded in for now */
   { nickname: "home", location:"san+francisco" , latitude: 37.7749295, longitude: -122.4194155, maxradiuskm: 100, minmagnitude: 3 },
-  { nickname: "bro", location: "yuma+arizona", latitude: 32.626512, longitude: -114.6276916, maxradiuskm: 100, minmagnitude: 3 },
+  { nickname: "bro", location: "san+luis+obispo+california", latitude: 32.626512, longitude: -114.6276916, maxradiuskm: 100, minmagnitude: 3 },
   { nickname: "jane", location:"ada+michigan", latitude: 42.9607266, longitude: -85.495471, maxradiuskm: 100, minmagnitude: 3 }
 ];
 
@@ -211,7 +257,15 @@ function getUsgsCallback(alexa, loc) {
       res = "No earthquakes near " + loc + " in the last 14 days.";
     }
     console.log(res);
-    alexa.tell(res);
+
+    /* Google Analytics tracking */
+    trackEvent('Get location','Info','Get','1',
+    function(err) {
+            if (err) {
+                return next(err);
+            }
+            alexa.tell(res);
+          });
   };
 }
 
